@@ -1,0 +1,32 @@
+enable
+configure terminal
+hostname SW-ENCINOS-A
+no ip domain-lookup
+spanning-tree mode rapid-pvst
+vtp domain 202112092
+vtp password redes2026
+vtp mode client
+vtp version 2
+interface range fastEthernet 0/1-3
+switchport mode access
+switchport access vlan 52
+no shutdown
+exit
+interface fastEthernet 0/24
+switchport mode trunk
+switchport trunk native vlan 99
+switchport trunk allowed vlan 52,99
+no shutdown
+exit
+interface range fastEthernet 0/4-23
+switchport mode access
+switchport access vlan 999
+shutdown
+exit
+interface range gigabitEthernet 0/1-2
+switchport mode access
+switchport access vlan 999
+shutdown
+exit
+end
+copy running-config startup-config

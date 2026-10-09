@@ -1,0 +1,108 @@
+enable
+configure terminal
+hostname SW-CORE1
+no ip domain-lookup
+spanning-tree mode rapid-pvst
+vtp domain 202112092
+vtp password redes2026
+vtp mode server
+vtp version 2
+vlan 12
+name PASEO_CAYALA
+exit
+vlan 22
+name DISTRITO_EMP
+exit
+vlan 32
+name PARQUE_CAYALA
+exit
+vlan 42
+name DISTRITO_MODA
+exit
+vlan 52
+name ENCINOS_CAYALA
+exit
+vlan 99
+name ADMIN_NATIVE
+exit
+vlan 999
+name BLACKHOLE
+exit
+
+spanning-tree vlan 99 priority 4096
+interface range gigabitEthernet 0/1-2
+switchport trunk encapsulation dot1q
+switchport mode trunk
+switchport trunk native vlan 99
+switchport trunk allowed vlan 12,99
+no shutdown
+channel-group 1 mode active
+exit
+interface port-channel 1
+switchport trunk encapsulation dot1q
+switchport mode trunk
+switchport trunk native vlan 99
+switchport trunk allowed vlan 12,99
+no shutdown
+exit
+interface fastEthernet 0/1
+switchport trunk encapsulation dot1q
+switchport mode trunk
+switchport trunk native vlan 99
+switchport trunk allowed vlan 22,99
+no shutdown
+exit
+interface fastEthernet 0/2
+switchport trunk encapsulation dot1q
+switchport mode trunk
+switchport trunk native vlan 99
+switchport trunk allowed vlan 52,99
+no shutdown
+exit
+interface range fastEthernet 0/23-24
+switchport trunk encapsulation dot1q
+switchport mode trunk
+switchport trunk native vlan 99
+switchport trunk allowed vlan 12,22,32,42,52,99
+no shutdown
+channel-group 10 mode active
+exit
+interface port-channel 10
+switchport trunk encapsulation dot1q
+switchport mode trunk
+switchport trunk native vlan 99
+switchport trunk allowed vlan 12,22,32,42,52,99
+no shutdown
+exit
+interface range fastEthernet 0/3-22
+switchport mode access
+switchport access vlan 999
+shutdown
+exit
+ip routing
+interface vlan 12
+ip address 192.168.12.1 255.255.255.192
+no shutdown
+exit
+interface vlan 22
+ip address 192.168.22.1 255.255.255.224
+no shutdown
+exit
+interface vlan 32
+ip address 192.168.32.1 255.255.255.240
+no shutdown
+exit
+interface vlan 42
+ip address 192.168.42.1 255.255.255.192
+no shutdown
+exit
+interface vlan 52
+ip address 192.168.52.1 255.255.255.240
+no shutdown
+exit
+interface vlan 99
+ip address 192.168.99.1 255.255.255.224
+no shutdown
+exit
+end
+copy running-config startup-config
